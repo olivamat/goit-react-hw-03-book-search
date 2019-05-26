@@ -1,0 +1,20 @@
+.card {
+  padding: 8px;
+  display: flex;
+}
+
+.card img {
+  max-width: 70%;
+  margin: 0 10px;
+}
+
+.card h2 {
+  margin-top: 0;
+  margin-bottom: 0;
+  font-weight: 500;
+}
+
+.card p {
+  margin-bottom: 0;
+  line-height: 1.5;
+}

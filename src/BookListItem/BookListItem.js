@@ -4,7 +4,7 @@ import styles from './BookListItem.module.css';
 
 const BookListItem = ({
   title,
-  autor,
+  authors,
   publisher,
   publishedDate,
   pageCount,
@@ -16,7 +16,7 @@ const BookListItem = ({
       <img src={url} alt="img" />
       <div>
         <h2>{title}</h2>
-        <p>Autor:{autor}</p>
+        <p>Authors:{authors}</p>
         <p>Publisher:{publisher}</p>
         <p>PublishedDate:{publishedDate}</p>
         <p>PageCount:{pageCount}</p>
@@ -31,7 +31,7 @@ BookListItem.defaultProps = {
 BookListItem.propTypes = {
   title: PropTypes.string.isRequired,
   url: PropTypes.string.isRequired,
-  autor: PropTypes.string.isRequired,
+  authors: PropTypes.string.isRequired,
   publisher: PropTypes.string.isRequired,
   publishedDate: PropTypes.string.isRequired,
   pageCount: PropTypes.number.isRequired,

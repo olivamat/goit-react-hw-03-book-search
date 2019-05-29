@@ -7,102 +7,61 @@ import * as bookApi from './servises/book-api';
 import SearchForm from './SearchForm/SearchForm';
 import genres from './genres.json';
 
-function mapper(books) {
-  const arr1 = books.map(({ volumeInfo: book, id }) => ({
-    ...book,
-    id,
-  }));
-  const arr2 = arr1.map(
-    ({
-      imageLinks: image,
-      title,
-      authors: autor,
+const mapper = books => {
+  return books.map(book => {
+    const { id } = book;
+    const { title } = book.volumeInfo;
+    const { authors } = book.volumeInfo;
+    const { publisher } = book.volumeInfo;
+    const { publishedDate } = book.volumeInfo;
+    const { pageCount } = book.volumeInfo;
+    const { rating } = book.volumeInfo;
+    const url = book.volumeInfo.imageLinks.smallThumbnail;
+    return {
       id,
-      publisher,
-      publishedDate,
-      pageCount,
-      ratingsCount: rating,
-    }) => ({
-      ...image,
       title,
-      autor,
-      id,
+      authors,
       publisher,
       publishedDate,
       pageCount,
       rating,
-    }),
-  );
-  const arr3 = arr2.map(
-    ({
-      smallThumbnail: url,
-      title,
-      autor,
-      id,
-      publisher,
-      publishedDate,
-      pageCount,
-      rating,
-    }) => ({
       url,
-      title,
-      autor,
-      id,
-      publisher,
-      publishedDate,
-      pageCount,
-      rating,
-    }),
-  );
-  return arr3;
-}
+    };
+  });
+};
 
 export default class App extends Component {
   state = {
     books: [],
     isLoading: false,
     error: null,
-    query: 'react',
-    genre: 'computers',
   };
 
   componentDidMount() {
-    this.fetchBook();
+    this.fetchBook({ query: 'react', genre: 'computers' });
   }
 
-  fetchBook = () => {
+  fetchBook = ({ query, genre }) => {
     this.setState({ isLoading: true });
+
     bookApi
-      .fetchBooks(this.state.query, this.state.genre)
+      .fetchBooks(query, genre)
       .then(({ data }) => {
         this.setState({ books: mapper(data.items) });
       })
       .catch(error => this.setState({ error }))
       .finally(() => {
-        this.setState({ isLoading: false, query: '' });
+        this.setState({ isLoading: false });
       });
   };
 
-  handleQueryChange = e => {
-    this.setState({ query: e.target.value });
-  };
-
-  handleQuerySelect = e => {
-    this.setState({ genre: e.target.value });
-  };
-
   render() {
-    const { books, isLoading, error, query } = this.state;
+    const { books, isLoading, error } = this.state;
 
     return (
       <div className="App">
-        <SearchForm
-          genres={genres}
-          value={query}
-          onChangeInput={this.handleQueryChange}
-          onChangeSelect={this.handleQuerySelect}
-          onSubmit={this.fetchBook}
-        />
+        <h1>If you do not like React, make your choice!</h1>
+        <SearchForm genres={genres} onSubmit={this.fetchBook} />
         {error && <ErrorNotofication text={error.message} />}
         {isLoading && <Loader />}
         {books.length > 0 && <BookList items={books} />}
